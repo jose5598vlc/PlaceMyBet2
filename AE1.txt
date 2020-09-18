@@ -1,0 +1,59 @@
+AE1 // ACCESO A DATOS // CREACION DE MODELOS RELACIONALES
+
+DISEÑO CONCEPTUAL DE TABLAS
+DISEÑO LOGICO EN MYSQL Y CREACION DE BBDD
+
+COLOCAR LINK DEL REPOSITORIO EN LA ENTREGA EN FLORIDA OBERTA
+
+
+DATOS DE LA TABLA -> EVENTO:
+
+
+
+equipoLocal - string (nombre equipo local)
+equipoVisitante - string (nombre equipo visitante)
+fecha - date (fecha del evento)
+
+
+DATOS DE LA TABLA -> MERCADO :
+
+
+infocuotaOver - int (dinero cuota over)
+infocuotaUnder - int (dinero cuota under)
+dineroApostadoOver - int (dinero apostado over)
+dineroApostadoUnder - int (dinero apostado under)
+
+
+ EVENTO: -> DESPLEGAR 3 MERCADOS DISPONIBLES
+
+
+
+OVER/UNDER - 1.5
+OVER/UNDER - 2.5 
+OVER/UNDER - 3.5
+
+
+ALMACENAR DATOS DE LOS USUARIOS 
+
+TABLA USUARIOS:
+
+
+
+email - primary key
+nombre  - string
+apellidos - string
+edad - int 
+
+TABLA C.BANCARIA:
+
+saldoActual - int
+nombreBanco - string
+numtarcredito - int
+
+
+RELACION DE TABLAS 
+
+EVENTO A MERCADO - RELACION 0 a N // 1 a N 
+
+USUARIOS A C.BANCARIA - RELACION 0 a 1 // 1  a 1
+
