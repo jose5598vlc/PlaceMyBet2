@@ -109,6 +109,37 @@ namespace PlaceMyBet.Models
             double cuotaOver = 1 / probabilidadOver * 0.95;
 
             double cuotaUnder = 1 / probabilidadUnder * 0.95;
+
+        
+                MySqlCommand actualizarcuotaOver = con.CreateCommand();
+                actualizarCuota.CommandText = "UPDATE mercado SET infocuotaOver = " + cuotaOver +  ", infocuotaUnder = " + cuotaUnder + " WHERE id = " + apuesta.idMercado + " ";
+                Debug.WriteLine("comando " + comand.CommandText);
+
+                try
+                {
+                    con.Open();
+                    comand.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (MySqlException e)
+                {
+                    Debug.WriteLine("se ha producido error de conexion");
+                }
+
+        MySqlCommand actualizarcuotaUnder = con.CreateCommand();
+                actualizarCuota.CommandText = "UPDATE mercado SET infocuotaUnder = " + cuotaUnder +  ", infocuotaUnder = " + cuotaUnder + " WHERE id = " + apuesta.idMercado + " ";
+                Debug.WriteLine("comando " + comand.CommandText);
+
+                try
+                {
+                    con.Open();
+                    comand.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (MySqlException e)
+                {
+                    Debug.WriteLine("se ha producido error de conexion");
+                }
          * 
          * */
     }
