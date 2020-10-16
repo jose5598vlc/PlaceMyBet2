@@ -7,7 +7,7 @@ namespace PlaceMyBet.Models
 {
     public class CBancaria
     {
-        public CBancaria(int idCBancaria, int saldoBanco, string nombreBanco, int numtarCredito, int idUsuario)
+        public CBancaria(int idCBancaria, double saldoBanco, string nombreBanco, int numtarCredito, int idUsuario)
         {
             this.idCBancaria = idCBancaria;
             this.saldoBanco = saldoBanco;
@@ -18,7 +18,7 @@ namespace PlaceMyBet.Models
 
         public int idCBancaria { get; set; }
 
-        public int saldoBanco { get; set; }
+        public double saldoBanco { get; set; }
 
         public string nombreBanco { get; set; }
 

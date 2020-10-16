@@ -11,17 +11,25 @@ namespace PlaceMyBet.Controllers
     public class UsuariosController : ApiController
     {
         // GET: api/Usuarios
-        public IEnumerable<string> Get()
+        public IEnumerable<Usuario> Get()
         {
+            /*
             return new string[] { "value1", "value2" };
+            */
+            var repo = new UsuarioRepository();
+            List<Usuario> usuario = repo.Retrieve();
+            return usuario;
         }
 
         // GET: api/Usuarios/5
         public Usuario Get(int id)
         {
+            /*
             var repo = new UsuarioRepository();
             Usuario u = repo.Retrieve();
             return u;
+            */
+            return null;
         }
 
         // POST: api/Usuarios

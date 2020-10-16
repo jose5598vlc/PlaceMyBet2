@@ -12,6 +12,7 @@ fecha VARCHAR(45)
 CREATE TABLE Mercado (
 
 idMercado INT PRIMARY KEY,
+tipoMercado INT,
 infocuotaOver DOUBLE,
 infocuotaUnder DOUBLE,
 dineroapostadoOver DOUBLE,
@@ -24,7 +25,7 @@ FOREIGN KEY (idEvento) REFERENCES Evento (idEvento)
 CREATE TABLE Usuario (
 
 idUsuario INT,
-Email VARCHAR(45),
+Email VARCHAR(45) UNIQUE,
 PRIMARY KEY (idUsuario, Email),
 Nombre VARCHAR(45),
 Apellidos VARCHAR(45),
@@ -35,7 +36,7 @@ Edad INT
 CREATE TABLE CBancaria (
 
 idCBancaria INT PRIMARY KEY,
-saldoBanco INT,
+saldoBanco DOUBLE,
 nombreBanco VARCHAR(45),
 numtarCredito INT,
 idUsuario INT,
@@ -49,8 +50,8 @@ tipoApuesta BOOL,
 cuota DOUBLE,
 dineroApostado DOUBLE,
 fecha VARCHAR(45),
-idUsuario INT,
 idMercado INT,
-FOREIGN KEY (idUsuario) REFERENCES Usuario (idUsuario),
-FOREIGN KEY (idMercado) REFERENCES Mercado (idMercado)
+Email VARCHAR(45),
+FOREIGN KEY (idMercado) REFERENCES Mercado (idMercado),
+FOREIGN KEY (Email) REFERENCES Usuario (Email)
 );
