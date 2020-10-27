@@ -35,11 +35,29 @@ namespace PlaceMyBet.Controllers
             return null;
         }
 
-        // POST: api/Apuestas
-        public void Post([FromBody] Apuesta apuesta, Mercado mercado, Usuario usuario)
+        // GET: api/Apuestas?idUsuario=Email
+
+        public IEnumerable<ApuestaUsuario> GetApuestaUsuarios(string Email)
         {
             var repo = new ApuestaRepository();
-            repo.Save(apuesta,mercado,usuario);
+            List<ApuestaUsuario> apuesta = repo.RetrieveEmail(Email);
+            return apuesta;
+        }
+
+        // GET: api/Apuestas?tipoMercado=Mercado
+
+        public IEnumerable<ApuestaMercado> GetApuestaMercado(double tipoMercado)
+        {
+            var repo = new ApuestaRepository();
+            List<ApuestaMercado> apuesta = repo.RetrieveApuestaMercado(tipoMercado);
+            return apuesta;
+        }
+
+        // POST: api/Apuestas
+        public void Post([FromBody] Apuesta apuesta)
+        {
+            var repo = new ApuestaRepository();
+            repo.Save(apuesta);
         }
 
         // PUT: api/Apuestas/5

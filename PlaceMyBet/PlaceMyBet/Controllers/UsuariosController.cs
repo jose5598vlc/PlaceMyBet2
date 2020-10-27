@@ -17,8 +17,8 @@ namespace PlaceMyBet.Controllers
             return new string[] { "value1", "value2" };
             */
             var repo = new UsuarioRepository();
-            List<Usuario> usuario = repo.Retrieve();
-            return usuario;
+            List<Usuario> usuarios = repo.Retrieve();
+            return usuarios;
         }
 
         // GET: api/Usuarios/5

@@ -12,7 +12,7 @@ namespace PlaceMyBet.Models
 
         private MySqlConnection Connect()
         {
-            string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=LORENA;password=LORENA2001;SslMode=none";
+            string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=;password=;SslMode=none";
             MySqlConnection con = new MySqlConnection(connString);
             return con;
         }
@@ -30,15 +30,15 @@ namespace PlaceMyBet.Models
                 MySqlDataReader res = command.ExecuteReader();
 
                 Usuario u = null;
-                List<Usuario> usuario = new List<Usuario>();
+                List<Usuario> usuarios = new List<Usuario>();
                 while (res.Read())
                 {
                     Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetString(1) + " " + res.GetString(2) + " " + res.GetString(3) + " " + res.GetInt32(4));
                     u = new Usuario(res.GetInt32(0), res.GetString(1), res.GetString(2), res.GetString(3), res.GetInt32(4));
-                    usuario.Add(u);
+                    usuarios.Add(u);
                 }
                 con.Close();
-                return usuario;
+                return usuarios;
 
             }
             catch (MySqlException c)

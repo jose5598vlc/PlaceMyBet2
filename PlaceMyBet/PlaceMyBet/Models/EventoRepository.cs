@@ -12,7 +12,7 @@ namespace PlaceMyBet.Models
 
         private MySqlConnection Connect()
         {
-            string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=LORENA;password=LORENA2001;SslMode=none";
+            string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=root;password=;SslMode=none";
             MySqlConnection con = new MySqlConnection(connString);
             return con;
         }
@@ -30,15 +30,15 @@ namespace PlaceMyBet.Models
                 MySqlDataReader res = command.ExecuteReader();
 
                 Evento e = null;
-                List<Evento> evento = new List<Evento>();
+                List<Evento> eventos = new List<Evento>();
                 while (res.Read())
                 {
                     Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetString(1) + " " + res.GetString(2) + " " + res.GetString(3));
                     e = new Evento(res.GetInt32(0), res.GetString(1), res.GetString(2), res.GetString(3));
-                    evento.Add(e);
+                    eventos.Add(e);
                 }
                 con.Close();
-                return evento;
+                return eventos;
             }
             catch (MySqlException c)
             {
@@ -60,15 +60,15 @@ namespace PlaceMyBet.Models
                 MySqlDataReader res = command.ExecuteReader();
 
                 EventoDTO e = null;
-                List<EventoDTO> evento = new List<EventoDTO>();
+                List<EventoDTO> eventos = new List<EventoDTO>();
                 while (res.Read())
                 {
                     Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetString(1) + " " + res.GetString(2) + " " + res.GetString(3));
                     e = new EventoDTO(res.GetString(1), res.GetString(2), res.GetString(3));
-                    evento.Add(e);
+                    eventos.Add(e);
                 }
                 con.Close();
-                return evento;
+                return eventos;
             }
             catch (MySqlException c)
             {

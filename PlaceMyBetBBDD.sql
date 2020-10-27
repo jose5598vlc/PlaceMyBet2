@@ -12,7 +12,7 @@ fecha VARCHAR(45)
 CREATE TABLE Mercado (
 
 idMercado INT PRIMARY KEY,
-tipoMercado INT,
+tipoMercado DOUBLE,
 infocuotaOver DOUBLE,
 infocuotaUnder DOUBLE,
 dineroapostadoOver DOUBLE,

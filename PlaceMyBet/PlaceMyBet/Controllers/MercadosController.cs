@@ -20,8 +20,8 @@ namespace PlaceMyBet.Controllers
             /*
             List<Mercado> mercado = repo.Retrieve();
             */
-            List<MercadoDTO> mercado = repo.RetrieveDTO();
-            return mercado;
+            List<MercadoDTO> mercados = repo.RetrieveDTO();
+            return mercados;
         }
 
         // GET: api/Mercados/5

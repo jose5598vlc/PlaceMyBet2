@@ -12,7 +12,7 @@ namespace PlaceMyBet.Models
 
         private MySqlConnection Connect()
         {
-            string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=LORENA;password=LORENA2001;SslMode=none";
+            string connString = "Server=127.0.0.1;Port=3306;Database=placemybet;Uid=root;password=;SslMode=none";
             MySqlConnection con = new MySqlConnection(connString);
             return con;
         }
@@ -30,16 +30,16 @@ namespace PlaceMyBet.Models
                 MySqlDataReader res = command.ExecuteReader();
 
                 Apuesta a = null;
-                List<Apuesta> apuesta = new List<Apuesta>();
+                List<Apuesta> apuestas = new List<Apuesta>();
 
-              while (res.Read())
+                while (res.Read())
                 {
                     Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetBoolean(1) + " " + res.GetDouble(2) + " " + res.GetDouble(3) + " " + res.GetString(4) + " " + res.GetInt32(5) + " " + res.GetString(6));
                     a = new Apuesta(res.GetInt32(0), res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetString(4), res.GetInt32(5), res.GetString(6));
-                    apuesta.Add(a);
+                    apuestas.Add(a);
                 }
                 con.Close();
-                return apuesta;
+                return apuestas;
             }
             catch (MySqlException c)
             {
@@ -61,16 +61,16 @@ namespace PlaceMyBet.Models
                 MySqlDataReader res = command.ExecuteReader();
 
                 ApuestaDTO a = null;
-                List<ApuestaDTO> apuesta = new List<ApuestaDTO>();
+                List<ApuestaDTO> apuestas = new List<ApuestaDTO>();
 
                 while (res.Read())
                 {
                     Debug.WriteLine("Recuperado: " + res.GetInt32(0) + " " + res.GetBoolean(1) + " " + res.GetDouble(2) + " " + res.GetDouble(3) + " " + res.GetString(4) + " " + res.GetInt32(5) + " " + res.GetString(6));
                     a = new ApuestaDTO(res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetString(4), res.GetInt32(5), res.GetString(6));
-                    apuesta.Add(a);
+                    apuestas.Add(a);
                 }
                 con.Close();
-                return apuesta;
+                return apuestas;
             }
             catch (MySqlException c)
             {
@@ -79,68 +79,153 @@ namespace PlaceMyBet.Models
             }
         }
 
-        internal void Save(Apuesta a, Mercado m, Usuario u)
+        internal void Save(Apuesta a)
         {
-            MySqlConnection con = Connect();
-            MySqlCommand command = con.CreateCommand();
-            command.CommandText = " INSERT INTO Mercado.tipoMercado, Apuesta.tipoApuesta, Apuesta.dineroApostado, Usuario.idUsuario FROM Mercado INNER JOIN Apuesta ON Mercado.idMercado = Apuesta.idMercado INNER JOIN Usuario ON Usuario.Email = Apuesta.Email VALUES (' " + m.tipoMercado + " , " + a.tipoApuesta + " , " + a.dineroApostado + " , " + u.idUsuario + " '); ";
-            Debug.WriteLine("comando" + command.CommandText);
-            
-            try
+            using (MySqlConnection con = Connect())
             {
+                MySqlCommand command = con.CreateCommand();
+                command.CommandText = "insert into apuestas(idMercado,tipoApuesta,cuota,dineroApostado,Email) values " +
+                        "(" + a.idMercado + ",'" + a.tipoApuesta + "', " + a.cuota + ", " + a.dineroApostado + ", '" + a.Email + "');";
+                Debug.WriteLine("comando" + command.CommandText);
+
+                try
+                {
+                    con.Open();
+                    command.ExecuteNonQuery();
+                    con.Close();
+                }
+                catch (MySqlException c)
+                {
+                    Debug.WriteLine("Error en la conexión");
+                }
+
+ 
+            }
+
+            double ProbaOver = 0;
+            double ProbaUnder = 0;
+
+            double dineroOver = 0;
+            double dineroUnder = 0;
+
+            double cuotaOver = 0;
+            double cuotaUnder = 0;
+
+            using (MySqlConnection con = Connect())
+            {
+                MySqlCommand command = con.CreateCommand();
+                if (a.tipoApuesta == true)
+                {
+                    command.CommandText = "UPDATE mercado set dineroapostadoUnder=dineroapostadoUnder + " + a.dineroApostado + " WHERE idMercado =" + a.idMercado;
+                }
+                else
+                {
+                    command.CommandText = "UPDATE mercado set dineroapostadoOver=dineroapostadoOver + " + a.dineroApostado + " WHERE idMercado =" + a.idMercado;
+                }
+
+                con.Open();
+                command.ExecuteNonQuery();
+                command.CommandText = "SELECT dineroapostadoOver,dineroapostadoUnder from mercado";
+                MySqlDataReader res = command.ExecuteReader();
+
+                if (res.Read())
+                {
+                    dineroOver = res.GetDouble(0);
+                    dineroUnder = res.GetDouble(1);
+
+                    ProbaOver = dineroOver / (dineroOver + dineroUnder);
+                    ProbaUnder = dineroUnder / (dineroOver + dineroUnder);
+                }
+                con.Close();
+                cuotaOver = (1 / ProbaOver) * 0.95;
+                cuotaUnder = (1 / ProbaUnder) * 0.95;
+
+                if (dineroOver == 0 && a.tipoApuesta == true)
+                {
+                    cuotaOver = 0;
+                }
+                else if (dineroUnder == 0 && a.tipoApuesta == true)
+                {
+                    cuotaUnder = 0;
+                }
+            }
+            using (MySqlConnection con = Connect())
+            {
+                MySqlCommand command = con.CreateCommand();
+                command.CommandText = "UPDATE mercado set infocuotaOver='" + cuotaOver + "', infocuotaUnder='" + cuotaUnder + "' WHERE idMercado =" + a.idMercado;
                 con.Open();
                 command.ExecuteNonQuery();
                 con.Close();
             }
-            catch (MySqlException c)
+
+        }
+
+        internal List<ApuestaUsuario> RetrieveEmail(string Email)
+        {
+            MySqlConnection con = Connect();
+            MySqlCommand command = con.CreateCommand();
+            command.CommandText = "SELECT a.tipoApuesta, a.cuota, a.dineroApostado, e.idEvento from apuesta as a INNER JOIN mercado as m ON a.idMercado=m.idMercado INNER JOIN evento as e ON m.idMercado=e.idEvento WHERE a.idUsuario=@idUsuario;";
+            command.Parameters.AddWithValue("@idUsuario", Email);
+            try
             {
-                Debug.WriteLine("Error en la conexión");
+                con.Open();
+                MySqlDataReader res = command.ExecuteReader();
+
+                ApuestaUsuario a = null;
+                List<ApuestaUsuario> apuestas = new List<ApuestaUsuario>();
+                while (res.Read())
+                {
+                    Debug.WriteLine("Recuperado: " + res.GetBoolean(0) + " " + res.GetDouble(1) + " " + res.GetDouble(2) + " " + res.GetInt32(3));
+                    a = new ApuestaUsuario(res.GetBoolean(0), res.GetDouble(1), res.GetDouble(2), res.GetInt32(3));
+                    apuestas.Add(a);
+                }
+
+                con.Close();
+                return apuestas;
+            }
+
+            catch (MySqlException e)
+            {
+                Debug.WriteLine("Se ha producido un error de conexión");
+                return null;
             }
         }
 
-        /* 
-         * double probabilidadOver = dineroTotalOver / dineroTotalOver + dineroTotalUnder;
+        internal List<ApuestaMercado> RetrieveApuestaMercado(double tipoMercado)
+        {
+            MySqlConnection con = Connect();
+            MySqlCommand command = con.CreateCommand();
+            command.CommandText = "SELECT a.tipoApuesta, a.cuota, a.dineroApostado, a.idUsuario, m.tipoMercado from apuesta as a INNER JOIN mercado as m WHERE m.tipoMercado=@tipoMercado;";
+            command.Parameters.AddWithValue("@tipoMercado", tipoMercado);
+            try
+            {
+                con.Open();
+                MySqlDataReader res = command.ExecuteReader();
 
-            double probabilidadUnder = dineroTotalUnder / dineroTotalOver + dineroTotalUnder;
-
-
-         
-
-            double cuotaOver = 1 / probabilidadOver * 0.95;
-
-            double cuotaUnder = 1 / probabilidadUnder * 0.95;
-
-        
-                MySqlCommand actualizarcuotaOver = con.CreateCommand();
-                actualizarCuota.CommandText = "UPDATE mercado SET infocuotaOver = " + cuotaOver +  ", infocuotaUnder = " + cuotaUnder + " WHERE id = " + apuesta.idMercado + " ";
-                Debug.WriteLine("comando " + comand.CommandText);
-
-                try
+                ApuestaMercado a = null;
+                List<ApuestaMercado> apuestas = new List<ApuestaMercado>();
+                while (res.Read())
                 {
-                    con.Open();
-                    comand.ExecuteNonQuery();
-                    con.Close();
-                }
-                catch (MySqlException e)
-                {
-                    Debug.WriteLine("se ha producido error de conexion");
+                    Debug.WriteLine("Recuperado: " + res.GetDouble(0) + " " + res.GetBoolean(1) + " " + res.GetDouble(2) + " " + res.GetDouble(3) + " " + res.GetInt32(4));
+                    a = new ApuestaMercado(res.GetDouble(0), res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetInt32(4));
+                    apuestas.Add(a);
                 }
 
-        MySqlCommand actualizarcuotaUnder = con.CreateCommand();
-                actualizarCuota.CommandText = "UPDATE mercado SET infocuotaUnder = " + cuotaUnder +  ", infocuotaUnder = " + cuotaUnder + " WHERE id = " + apuesta.idMercado + " ";
-                Debug.WriteLine("comando " + comand.CommandText);
+                con.Close();
+                return apuestas;
+            }
 
-                try
-                {
-                    con.Open();
-                    comand.ExecuteNonQuery();
-                    con.Close();
-                }
-                catch (MySqlException e)
-                {
-                    Debug.WriteLine("se ha producido error de conexion");
-                }
-         * 
-         * */
+            catch (MySqlException e)
+            {
+                Debug.WriteLine("Se ha producido un error de conexión");
+                return null;
+            }
+        }
+
+
+
+
     }
+
+
 }

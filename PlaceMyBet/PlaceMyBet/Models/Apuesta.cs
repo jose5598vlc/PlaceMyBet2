@@ -38,7 +38,7 @@ namespace PlaceMyBet.Models
     {
         public ApuestaDTO(bool tipoApuesta, double cuota, double dineroApostado, string fecha, int idMercado, string Email)
         {
-            
+
             this.tipoApuesta = tipoApuesta;
             this.cuota = cuota;
             this.dineroApostado = dineroApostado;
@@ -47,7 +47,7 @@ namespace PlaceMyBet.Models
             this.Email = Email;
         }
 
-       
+
 
         public bool tipoApuesta { get; set; }
 
@@ -62,4 +62,45 @@ namespace PlaceMyBet.Models
 
         public string Email { get; set; }
     }
+
+    public class ApuestaUsuario
+    {
+        public ApuestaUsuario(Boolean tipoApuesta, double cuota, double dineroApostado, int idEvento)
+        {
+            this.tipoApuesta = tipoApuesta;
+            this.cuota = cuota;
+            this.dineroApostado = dineroApostado;
+            this.idEvento = idEvento;
+
+        }
+        public Boolean tipoApuesta { get; set; }
+        public double cuota { get; set; }
+        public double dineroApostado { get; set; }
+        public int idEvento { get; set; }
+
+    }
+
+    public class ApuestaMercado
+    {
+        public ApuestaMercado(double tipoMercado, Boolean tipoApuesta, double cuota, double dineroApostado, int idUsurio)
+        {
+            this.tipoMercado = tipoMercado;
+            this.tipoApuesta = tipoApuesta;
+            this.cuota = cuota;
+            this.dineroApostado = dineroApostado;
+            this.idUsuario = idUsurio;
+
+        }
+
+        
+        public double tipoMercado { get; set; }
+        public Boolean tipoApuesta { get; set; }
+        public double cuota { get; set; }
+
+        public double dineroApostado { get; set; }
+
+        public int idUsuario { get; set; }
+    }
+
+
 }

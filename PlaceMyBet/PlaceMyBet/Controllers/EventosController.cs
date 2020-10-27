@@ -18,8 +18,8 @@ namespace PlaceMyBet.Controllers
             /*
             List<Evento> evento = repo.Retrieve();
             */
-            List<EventoDTO> evento = repo.RetrieveDTO();
-            return evento;
+            List<EventoDTO> eventos = repo.RetrieveDTO();
+            return eventos;
         }
 
         // GET: api/Eventos/5
