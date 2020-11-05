@@ -164,8 +164,8 @@ namespace PlaceMyBet.Models
         {
             MySqlConnection con = Connect();
             MySqlCommand command = con.CreateCommand();
-            command.CommandText = "SELECT a.tipoApuesta, a.cuota, a.dineroApostado, e.idEvento from apuesta as a INNER JOIN mercado as m ON a.idMercado=m.idMercado INNER JOIN evento as e ON m.idMercado=e.idEvento WHERE a.idUsuario=@idUsuario;";
-            command.Parameters.AddWithValue("@idUsuario", Email);
+            command.CommandText = "SELECT a.tipoApuesta, a.cuota, a.dineroApostado, e.idEvento from apuesta as a INNER JOIN mercado as m ON a.idMercado=m.idMercado INNER JOIN evento as e ON m.idMercado=e.idEvento WHERE a.email=@email;";
+            command.Parameters.AddWithValue("@email", Email);
             try
             {
                 con.Open();
@@ -195,7 +195,7 @@ namespace PlaceMyBet.Models
         {
             MySqlConnection con = Connect();
             MySqlCommand command = con.CreateCommand();
-            command.CommandText = "SELECT a.tipoApuesta, a.cuota, a.dineroApostado, a.idUsuario, m.tipoMercado from apuesta as a INNER JOIN mercado as m WHERE m.tipoMercado=@tipoMercado;";
+            command.CommandText = "SELECT m.tipoMercado, a.tipoApuesta, a.cuota, a.dineroApostado, a.email from apuesta as a INNER JOIN mercado as m INNER JOIN usuario as u WHERE m.tipoMercado=@tipoMercado;";
             command.Parameters.AddWithValue("@tipoMercado", tipoMercado);
             try
             {
@@ -206,8 +206,8 @@ namespace PlaceMyBet.Models
                 List<ApuestaMercado> apuestas = new List<ApuestaMercado>();
                 while (res.Read())
                 {
-                    Debug.WriteLine("Recuperado: " + res.GetDouble(0) + " " + res.GetBoolean(1) + " " + res.GetDouble(2) + " " + res.GetDouble(3) + " " + res.GetInt32(4));
-                    a = new ApuestaMercado(res.GetDouble(0), res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetInt32(4));
+                    Debug.WriteLine("Recuperado: " + res.GetDouble(0) + " " + res.GetBoolean(1) + " " + res.GetDouble(2) + " " + res.GetDouble(3) + " " + res.GetString(4));
+                    a = new ApuestaMercado(res.GetDouble(0), res.GetBoolean(1), res.GetDouble(2), res.GetDouble(3), res.GetString(4));
                     apuestas.Add(a);
                 }
 

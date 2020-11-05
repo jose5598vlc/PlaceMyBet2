@@ -40,8 +40,8 @@ namespace PlaceMyBet.Controllers
         public IEnumerable<ApuestaUsuario> GetApuestaUsuarios(string Email)
         {
             var repo = new ApuestaRepository();
-            List<ApuestaUsuario> apuesta = repo.RetrieveEmail(Email);
-            return apuesta;
+            List<ApuestaUsuario> apuestas = repo.RetrieveEmail(Email);
+            return apuestas;
         }
 
         // GET: api/Apuestas?tipoMercado=Mercado
@@ -49,8 +49,8 @@ namespace PlaceMyBet.Controllers
         public IEnumerable<ApuestaMercado> GetApuestaMercado(double tipoMercado)
         {
             var repo = new ApuestaRepository();
-            List<ApuestaMercado> apuesta = repo.RetrieveApuestaMercado(tipoMercado);
-            return apuesta;
+            List<ApuestaMercado> apuestas = repo.RetrieveApuestaMercado(tipoMercado);
+            return apuestas;
         }
 
         // POST: api/Apuestas

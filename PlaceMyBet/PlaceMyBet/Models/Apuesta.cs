@@ -82,13 +82,13 @@ namespace PlaceMyBet.Models
 
     public class ApuestaMercado
     {
-        public ApuestaMercado(double tipoMercado, Boolean tipoApuesta, double cuota, double dineroApostado, int idUsurio)
+        public ApuestaMercado(double tipoMercado, Boolean tipoApuesta, double cuota, double dineroApostado, string email)
         {
             this.tipoMercado = tipoMercado;
             this.tipoApuesta = tipoApuesta;
             this.cuota = cuota;
             this.dineroApostado = dineroApostado;
-            this.idUsuario = idUsurio;
+            this.email = email;
 
         }
 
@@ -99,7 +99,7 @@ namespace PlaceMyBet.Models
 
         public double dineroApostado { get; set; }
 
-        public int idUsuario { get; set; }
+        public string email { get; set; }
     }
 
 
