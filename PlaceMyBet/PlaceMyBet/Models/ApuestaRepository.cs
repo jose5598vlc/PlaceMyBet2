@@ -84,8 +84,8 @@ namespace PlaceMyBet.Models
             using (MySqlConnection con = Connect())
             {
                 MySqlCommand command = con.CreateCommand();
-                command.CommandText = "insert into apuestas(idMercado,tipoApuesta,cuota,dineroApostado,Email) values " +
-                        "(" + a.idMercado + ",'" + a.tipoApuesta + "', " + a.cuota + ", " + a.dineroApostado + ", '" + a.Email + "');";
+                command.CommandText = "insert into apuesta(idMercado,tipoApuesta,cuota,dineroApostado,Email) values " +
+                        "( '" + a.idMercado + "','" + a.tipoApuesta + "', '" + a.cuota + "','" + a.dineroApostado + "','" + a.Email + "');";
                 Debug.WriteLine("comando" + command.CommandText);
 
                 try
@@ -114,7 +114,7 @@ namespace PlaceMyBet.Models
             using (MySqlConnection con = Connect())
             {
                 MySqlCommand command = con.CreateCommand();
-                if (a.tipoApuesta == true)
+                if (a.tipoApuesta == false)
                 {
                     command.CommandText = "UPDATE mercado set dineroapostadoUnder=dineroapostadoUnder + " + a.dineroApostado + " WHERE idMercado =" + a.idMercado;
                 }
@@ -144,7 +144,7 @@ namespace PlaceMyBet.Models
                 {
                     cuotaOver = 0;
                 }
-                else if (dineroUnder == 0 && a.tipoApuesta == true)
+                else if (dineroUnder == 0 && a.tipoApuesta == false)
                 {
                     cuotaUnder = 0;
                 }
