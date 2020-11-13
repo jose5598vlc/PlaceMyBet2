@@ -102,5 +102,25 @@ namespace PlaceMyBet.Models
         public string email { get; set; }
     }
 
+    // Ejercicio 2 examen lista de apuestas cuya cuota este entre 2 valores, valores a devolver nombre de usuario, dinero apostado
+    // y el  id del mercado
+    public class ApuestaExamen
+    {
+        public ApuestaExamen(string Nombre, double dineroApostado, int idMercado)
+        {
+            this.Nombre = Nombre;
+            this.dineroApostado = dineroApostado;
+            this.idMercado = idMercado;
+
+        }
+
+        public string Nombre { get; set; }
+
+        public double dineroApostado { get; set; }
+
+        public int idMercado { get; set; }
+
+    }
+
 
 }

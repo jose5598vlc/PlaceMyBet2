@@ -53,6 +53,16 @@ namespace PlaceMyBet.Controllers
             return apuestas;
         }
 
+        // Pregunta 2 
+        // GET: api/Apuestas?val1=cuota&val2=cuota
+
+            public IEnumerable<ApuestaExamen> GetApuestaExamen(double cuota)
+        {
+            var repo = new ApuestaRepository();
+            List<ApuestaExamen> apuestas = repo.RetrieveApuestaExamen(cuota);
+            return apuestas;
+        }
+
         // POST: api/Apuestas
         public void Post([FromBody] Apuesta apuesta)
         {

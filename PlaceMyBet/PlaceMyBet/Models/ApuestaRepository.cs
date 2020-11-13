@@ -222,8 +222,48 @@ namespace PlaceMyBet.Models
             }
         }
 
+        // Pregunta 2 de examen funcion donde se obtenga el listado de las apuestas cuya cuota este entre ambos valores incluidos
+
+        internal List<ApuestaExamen> RetrieveApuestaExamen(double cuota)
+        {
+
+            MySqlConnection con = Connect();
+            MySqlCommand command = con.CreateCommand();
+            command.CommandText = "SELECT u.Nombre, a.dineroApostado, m.idMercado FROM usuario AS u INNER JOIN apuesta AS a INNER JOIN mercado AS m WHERE a.cuota BETWEEN @cuota AND @cuota;";
+            command.Parameters.AddWithValue("@cuota", cuota);
+          
+           
+
+                try
+            {
+                con.Open();
+                MySqlDataReader res = command.ExecuteReader();
+
+                ApuestaExamen a = null;
+                List<ApuestaExamen> apuestas = new List<ApuestaExamen>();
+                while(res.Read())
+                {
+                    Debug.WriteLine("Recuperado: " + res.GetString(0) + " " + res.GetDouble(1) + " " + res.GetInt32(2));
+                    a = new ApuestaExamen(res.GetString(0), res.GetDouble(1), res.GetInt32(2));
+                    apuestas.Add(a);
+                }
+
+                        con.Close();
+                        return apuestas;
+                
+
+                    } catch (MySqlException e) {
 
 
+                    Debug.WriteLine("Error en la conexion");
+                    return null;
+
+            }
+
+
+
+
+        }
 
     }
 
