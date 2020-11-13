@@ -114,13 +114,13 @@ namespace PlaceMyBet.Models
             using (MySqlConnection con = Connect())
             {
                 MySqlCommand command = con.CreateCommand();
-                if (a.tipoApuesta == false)
+                if (a.tipoApuesta == true)
                 {
-                    command.CommandText = "UPDATE mercado set dineroapostadoUnder=dineroapostadoUnder + " + a.dineroApostado + " WHERE idMercado =" + a.idMercado;
+                    command.CommandText = "UPDATE mercado set dineroapostadoOver=dineroapostadoOver + " + a.dineroApostado + " WHERE idMercado =" + a.idMercado;
                 }
                 else
                 {
-                    command.CommandText = "UPDATE mercado set dineroapostadoOver=dineroapostadoOver + " + a.dineroApostado + " WHERE idMercado =" + a.idMercado;
+                    command.CommandText = "UPDATE mercado set dineroapostadoUnder=dineroapostadoUnder + " + a.dineroApostado + " WHERE idMercado =" + a.idMercado;
                 }
 
                 con.Open();
@@ -130,7 +130,7 @@ namespace PlaceMyBet.Models
 
                 if (res.Read())
                 {
-                    dineroOver = res.GetDouble(0);
+                    dineroOver= res.GetDouble(0);
                     dineroUnder = res.GetDouble(1);
 
                     ProbaOver = dineroOver / (dineroOver + dineroUnder);
