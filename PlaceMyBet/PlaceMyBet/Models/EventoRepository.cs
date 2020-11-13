@@ -77,7 +77,41 @@ namespace PlaceMyBet.Models
             }
         }
 
+        // Ejercicio 1 examen 
+        internal List<EventoExamen> RetrieveEventoExamen(int idEvento)
+        {
+            MySqlConnection con = Connect();
+            MySqlCommand command = con.CreateCommand();
 
-    }
+            command.CommandText = "SELECT e.equipoLocal, e.equipoVisitante, m.tipoMercado FROM evento AS e INNER JOIN mercado AS m ON m.idEvento=e.idEvento INNER JOIN apuesta AS a ON a.idMercado=m.idEvento WHERE a.dineroApostado>10;";
+            command.Parameters.AddWithValue("@idEvento", idEvento);
+
+            try
+            {
+                con.Open();
+                MySqlDataReader res = command.ExecuteReader();
+
+                EventoExamen e = null;
+                List<EventoExamen> eventos = new List<EventoExamen>();
+                while (res.Read())
+                {
+                    Debug.WriteLine("Recuperado: " + res.GetString(0) + " " + res.GetString(1) + " " + res.GetDouble(2));
+                    e = new EventoExamen(res.GetString(0), res.GetString(1), res.GetDouble(2));
+                    eventos.Add(e);
+                }
+
+                con.Close();
+                return eventos;
+
+            }
+            catch (MySqlException e)
+            {
+                Debug.WriteLine("Se ha producido un error de conexión");
+                return null;
+            }
+
+
+        }
+        }
 
 }

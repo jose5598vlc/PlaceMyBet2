@@ -229,7 +229,7 @@ namespace PlaceMyBet.Models
 
             MySqlConnection con = Connect();
             MySqlCommand command = con.CreateCommand();
-            command.CommandText = "SELECT u.Nombre, a.dineroApostado, m.idMercado FROM usuario AS u INNER JOIN apuesta AS a INNER JOIN mercado AS m WHERE a.cuota BETWEEN @cuota AND @cuota;";
+            command.CommandText = "SELECT u.Nombre, a.dineroApostado, m.idMercado FROM usuario AS u INNER JOIN apuesta AS a INNER JOIN mercado AS m on a.cuota=cuota WHERE a.cuota BETWEEN @cuota AND @cuota;";
             command.Parameters.AddWithValue("@cuota", cuota);
           
            

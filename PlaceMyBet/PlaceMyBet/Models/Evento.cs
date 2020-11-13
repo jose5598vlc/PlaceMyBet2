@@ -42,4 +42,21 @@ namespace PlaceMyBet.Models
         public string fecha { get; set; }
 
     }
+
+    // ejercicio 1 examen
+    public class EventoExamen
+    {
+        public EventoExamen(string equipoLocal, string equipoVisitante, double tipoMercado)
+        {
+            this.equipoLocal = equipoLocal;
+            this.equipoVisitante = equipoVisitante;
+            this.tipoMercado = tipoMercado;
+        }
+
+        public string equipoLocal { get; set; }
+
+        public string equipoVisitante { get; set; }
+
+        public double tipoMercado { get; set; }
+    }
 }

@@ -22,16 +22,26 @@ namespace PlaceMyBet.Controllers
             return eventos;
         }
 
+        //Ejercicio 1
         // GET: api/Eventos/5
-        public Evento Get(int id)
+        public IEnumerable<EventoExamen> GetEventoExamen(int idEvento)
         {
-            /*
+            
             var repo = new EventoRepository();
-            Evento e = repo.Retrieve();
-            return e;
-            */
-            return null;
+            List<EventoExamen> eventos = repo.RetrieveEventoExamen(idEvento);
+            return eventos;
+            
         }
+
+        // GET: api/Eventos/idEvento=idEvento
+        /*
+        public IEnumerable<EventoExamen> GetEventoExamen(int idEvento)
+        {
+            var repo = new EventoRepository();
+            List<EventoExamen> eventos = repo.RetrieveEventoExamen(idEvento);
+            return eventos;
+        }
+        */
 
         // POST: api/Eventos
         public void Post([FromBody]string value)
